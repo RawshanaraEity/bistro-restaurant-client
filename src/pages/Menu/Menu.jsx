@@ -20,34 +20,34 @@ const Menu = () => {
     return (
         <div>
             <Helmet>
-                <title>Bistro Boss Menu</title>
+                <title>Bistro Boss / Menu</title>
             </Helmet>
             <Cover img={menuImg} title="Our Menu" ></Cover>
             {/* main cover */}
-            <SectionTitle subHeading='Dont Miss' heading='TODAYS OFFER'></SectionTitle>
+            <SectionTitle subHeading='Dont Miss' heading="TODAY'S OFFER"></SectionTitle>
             {/* offered menu items */}
             <MenuCategory items={offered}></MenuCategory>
             {/* dessert menu items */}
             <MenuCategory 
             items={desserts}
-             title='Dessert'
+             title='dessert'
              img={dessertImg}
              ></MenuCategory>
              <MenuCategory
              items={pizza}
-             title='Pizza'
+             title='pizza'
              img={pizzaImg}
              >
              </MenuCategory>
              <MenuCategory
              items={salad}
-             title='Salad'
+             title='salad'
              img={saladImg}
              >
              </MenuCategory>
              <MenuCategory
              items={soup}
-             title='Soup'
+             title='soup'
              img={soupImg}
              >
              </MenuCategory>
