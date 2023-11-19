@@ -4,8 +4,13 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import SocialLogin from "../../components/socialLogin/SocialLogin";
 
 const Signup = () => {
+        const axiosPublic = useAxiosPublic()
+
+
   const {
     register,
     handleSubmit,
@@ -17,21 +22,34 @@ const Signup = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    createUser(data.email, data.password).then((result) => {
+    createUser(data.email, data.password)
+    .then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
       updateUserProfile(data.name, data.photoUrl)
         .then(() => {
-          console.log("user profile info updated");
-          reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "User created successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate('/')
+        //   console.log("user profile info updated");
+            // create user entry in the database
+            const userInfo = {
+                name: data.name,
+                email: data.email
+            }
+            axiosPublic.post('/users', userInfo)
+            .then(res => {
+                if(res.data.insertedId){
+                    console.log('user added to the database');
+                    reset();
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: "User created successfully",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                    navigate('/')
+                }
+            })
+         
         })
         .catch((error) => console.log(error));
     });
@@ -146,11 +164,12 @@ const Signup = () => {
                 />
               </div>
             </form>
-            <p>
+            <p className="px-6">
               <small>
                 Already have an account?<Link to="/login">Login</Link>{" "}
               </small>
             </p>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
