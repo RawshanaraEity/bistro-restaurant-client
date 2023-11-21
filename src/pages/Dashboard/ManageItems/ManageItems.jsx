@@ -1,17 +1,17 @@
-import { FaTrashAlt } from "react-icons/fa";
-import useCart from "../../../Hooks/useCart";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import useMenu from "../../../Hooks/useMenu";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 
 
-const Cart = () => {
-    const [cart, refetch] = useCart()
-    const axiosSecure = useAxiosSecure()
 
-    const totalPrice = cart.reduce((total, item) => total+item.price ,0)
+const ManageItems = () => {
+    const [menu, , refetch] = useMenu()
+   const axiosSecure = useAxiosSecure()
 
-    const handleDelete = (id) =>{
+    const handleDeleteItem = (item) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -20,10 +20,11 @@ const Cart = () => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
-            if (result.isConfirmed) { 
-                axiosSecure.delete(`/carts/${id}`)
-                .then(res => {
+          }).then( result => {
+            if (result.isConfirmed){
+                 axiosSecure.delete(`/menu/${item._id}`)
+                 .then(res => {
+                    console.log(res.data);
                     if(res.data.deletedCount > 0){
                         refetch()
                         Swal.fire({
@@ -31,50 +32,40 @@ const Cart = () => {
                                 text: "Your file has been deleted.",
                                 icon: "success"
                               });
-                    }
-                })
-
+                    } 
+                 })
+                
             }
           });
     }
 
 
 
-
     return (
         <div>
-            <div className="flex justify-evenly mb-8">
-            <h2 className="text-4xl">Items:{cart.length} </h2>
-            <h2 className="text-4xl">Total Price {totalPrice} </h2>
-            {
-              cart.length ? <Link to='/dashboard/payment'>
-              <button className="btn btn-primary">Pay</button>
-              </Link> : <button disabled className="btn btn-primary">Pay</button>
-
-            }
-            
-            </div>
-
+            <SectionTitle heading='Manage All Items' subHeading='Hurry Up'></SectionTitle>
+            <div>
             <div className="overflow-x-auto">
   <table className="table w-full">
     {/* head */}
-    <thead className="bg-slate-300">
+    <thead>
       <tr>
         <th>
           #
         </th>
         <th>Image</th>
-        <th>Name</th>
+        <th>Item Name</th>
         <th>Price</th>
-        <th>Action</th>
+        <th>Update</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
       {
-        cart.map((item, index) => <tr key={item._id}>
-            <th>
-              {index + 1}
-            </th>
+        menu.map((item, index) =>  <tr key={item._id}>
+            <td>
+                {index + 1}
+            </td>
             <td>
               <div className="flex items-center gap-3">
                 <div className="avatar">
@@ -82,26 +73,36 @@ const Cart = () => {
                     <img src={item.image} alt="Avatar Tailwind CSS Component" />
                   </div>
                 </div>
+                
               </div>
             </td>
             <td>
-           {item.name}
+              {item.name}
             </td>
-            <td>${item.price}</td>
-            <th>
-              <button onClick={() => handleDelete(item._id)} className="btn btn-ghost btn-lg">
+            <td className="text-right">$ {item.price}</td>
+            <td>
+           <Link to={`/dashboard/updateItems/${item._id}`}>
+           <button  className="btn btn-ghost btn-lg bg-yellow-600">
+                <FaEdit className="text-white"></FaEdit>
+              </button>
+           </Link>
+            </td>
+            <td>
+            <button onClick={() => handleDeleteItem(item)} className="btn btn-ghost btn-lg">
                 <FaTrashAlt className="text-red-600"></FaTrashAlt>
               </button>
-            </th>
-          </tr> )
+            </td>
+          </tr>)
       }
-      
+     
     </tbody>
+   
+    
   </table>
 </div>
+            </div>
         </div>
-
     );
 };
 
-export default Cart;
+export default ManageItems;
