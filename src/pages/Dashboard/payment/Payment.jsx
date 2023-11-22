@@ -1,12 +1,20 @@
+import { loadStripe } from "@stripe/stripe-js";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
 
+
+// todo: add publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATWAY_PK);
 
 const Payment = () => {
     return (
         <div>
             <SectionTitle heading='make payment' subHeading='please pay for eat'></SectionTitle>
             <div>
-                <h2>pay</h2>
+                <Elements stripe={stripePromise}>
+                    <CheckoutForm></CheckoutForm>
+                </Elements>
             </div>
             
         </div>
