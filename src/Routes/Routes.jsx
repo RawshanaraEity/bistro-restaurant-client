@@ -102,7 +102,7 @@ export const router = createBrowserRouter([
                 element: <AdminRoute>
                     <UpdateItem></UpdateItem>
                 </AdminRoute>,
-                loader: ({params}) =>  fetch(`http://localhost:5000/menu/${params.id}`)
+                loader: ({params}) =>  fetch(`https://bistro-restaurant-server-eta.vercel.app/menu/${params.id}`)
                 
             },
             {

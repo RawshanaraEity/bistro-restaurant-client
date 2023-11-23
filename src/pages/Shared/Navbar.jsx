@@ -27,9 +27,22 @@ const Navbar = () => {
       <li>
         <Link to="/order/salad">Order Food</Link>
       </li>
-      <li>
-        <Link to="/secret">Secret</Link>
+      {
+        // user ? 'true' : 'false'
+        // user ? consition ? 'double true' : 'one true' : 'false'
+      }
+      {
+        user && isAdmin &&  <li>
+        <Link to="/dashboard/adminHome">DashBoard</Link>
       </li>
+      }
+      {
+        user && !isAdmin &&  <li>
+        <Link to="/dashboard/userHome">DashBoard</Link>
+      </li>
+      }
+
+     
       <li>
         <Link to='/dashboard'>
           <button className="btn">
